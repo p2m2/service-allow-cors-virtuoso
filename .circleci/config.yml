@@ -1,8 +1,7 @@
 version: 2.1
 jobs:
   build:
-    context:
-      - DOCKER_CONTEXT
+    context: DOCKER_CONTEXT
     machine: true
     steps:
       - checkout
