@@ -21,7 +21,7 @@ jobs:
           command: |
              IMAGE=${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}
              echo "build and push ${IMAGE}"
-             docker build -t ${ORGANIZATION_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH} .
+             docker build -t ${ORGANIZATION_NAME}/${IMAGE} .
              echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
-             docker tag ${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH} ${ORGANIZATION_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}
+             docker tag ${IMAGE} ${ORGANIZATION_NAME}/${IMAGE}
              docker push ${ORGANIZATION_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}
