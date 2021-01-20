@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+
+  virtuoso:
+    image: tenforce/virtuoso:virtuoso7.2.5
+    container_name: virtuoso
+    environment:
+      DBA_PASSWORD: dba_virtuoso
+    ports:
+      - 8890:8890
+
+  chrome:
+    container_name: chrome
+    image: selenium/standalone-chrome
+    environment:
+      START_XVFB: 'false'
+
+  selenium_cors:
+    image: inraep2m2/service-allow-cors-virtuoso:0.0.1
+    container_name: selenium_cors
+    environment:
+      virtuoso_site: "http://virtuoso:8890"
+      login:  dba
+      passwd: dba_virtuoso
+      chrome_container: chrome
+    depends_on:
+        - chrome
+        - virtuoso
+    # wait 1m before execution, adjust according to configuration
+    command: bash -c 'sleep 1m && echo " **** configure CORS / Virtuoso  ****" && node virtuoso_cors.js'
