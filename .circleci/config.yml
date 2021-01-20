@@ -1,22 +1,52 @@
 version: 2.1
+workflows:
+  docker-publication-workflow:
+    jobs:
+      - build:
+          context:
+            - DOCKER_CONTEXT
+      - latest:
+          context:
+            - DOCKER_CONTEXT
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+executors:
+  docker-publisher:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+        auth:
+          username: ${DOCKER_USER}
+          password: ${DOCKER_PASS}
+
 jobs:
   build:
-    docker:
-      - image: circleci/golang:1.15
-        auth:
-          username: p2m2
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    executor: docker-publisher
     steps:
       - checkout
-      # ... steps for building/testing app ...
+      - setup_remote_docker
+      - run:
+          name: Publish Docker Image to Docker Hub
+          # publication of <application>:<application_branch>
+          command: |
+             IMAGE_NAME=${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}
 
-      - setup_remote_docker:
-          version: 19.03.13
-          docker_layer_caching: true
+             docker build -t ${ORGANIZATION_NAME}/${IMAGE_NAME} .
+             echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+             docker push ${ORGANIZATION_NAME}/${IMAGE_NAME}
+  latest:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Publish Docker "Latest" tag
+          # publication of <application>:latest
+          command: |
+             IMAGE_NAME=${CIRCLE_PROJECT_REPONAME}:latest
 
-      # build and push Docker image
-      - run: |
-          TAG=0.1.$CIRCLE_BUILD_NUM
-          docker build -t inraep2m2/service-allow-cors-virtuoso:$TAG .
-          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-          docker push inraep2m2/service-allow-cors-virtuoso:$TAG
+             docker build -t ${ORGANIZATION_NAME}/${IMAGE_NAME} .
+             echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+             docker push ${ORGANIZATION_NAME}/${IMAGE_NAME}
