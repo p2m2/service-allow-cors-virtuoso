@@ -1,7 +1,13 @@
 version: 2.1
+workflows:
+  my-workflow:
+    jobs:
+      - build:
+          context:
+            - DOCKER_CONTEXT
+
 jobs:
   build:
-    context: DOCKER_CONTEXT
     machine: true
     steps:
       - checkout
