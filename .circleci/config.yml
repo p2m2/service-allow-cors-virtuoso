@@ -23,5 +23,4 @@ jobs:
              echo "build and push ${IMAGE}"
              docker build -t ${ORGANIZATION_NAME}/${IMAGE} .
              echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
-             docker tag ${IMAGE} ${ORGANIZATION_NAME}/${IMAGE}
              docker push ${ORGANIZATION_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}
