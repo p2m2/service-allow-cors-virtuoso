@@ -18,5 +18,6 @@ jobs:
           command: |
              echo "build and push ${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}"
              echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
-             docker build -t inraep2m2/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH} .
-             docker push inraep2m2/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}
+             docker build -t ${ORGANIZATION_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH} .
+             docker tag ${CIRCLE_BRANCH} ${ORGANIZATION_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}
+             docker push ${ORGANIZATION_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}
