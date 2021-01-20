@@ -11,10 +11,8 @@ workflows:
           requires:
             - build
           filters:
-            tags:
-              only: circleci-project-setup
             branches:
-              ignore: /.*/
+              only: master
 executors:
   docker-publisher:
     docker:
