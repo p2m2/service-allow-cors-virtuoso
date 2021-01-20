@@ -11,7 +11,7 @@ jobs:
       # ... steps for building/testing app ...
 
       - setup_remote_docker:
-          version: 20.10.2
+          version: 19.03.13
 
       # build and push Docker image
       - run: |
