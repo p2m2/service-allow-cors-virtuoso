@@ -15,9 +15,13 @@ workflows:
             - DOCKER_CONTEXT
           filters:
             tags:
-              only: main master develop /^v.*/
+              only: /.*/
             branches:
-              ignore: /.*/
+              only:
+                - main
+                - master
+                - develop
+
       - latest:
           context:
             - DOCKER_CONTEXT
@@ -25,8 +29,8 @@ workflows:
             - build
           filters:
             tags:
-              # only tag release version "v"*** are tag latest
-              only: /^v.*/
+              # only tag release version are tag latest
+              only: /.*/
             branches:
               # nothing coming from branch are deployed as latest
               ignore: /.*/
