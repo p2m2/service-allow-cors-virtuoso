@@ -13,9 +13,9 @@ jobs:
       - checkout
       # build and push Docker image
       - run: |
-        TAG=${CIRCLE_BRANCH}
-        echo "build and push ${CIRCLE_PROJECT_REPONAME}:${TAG}"
-        echo "=====>"${pipeline.git.tag}
-        echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
-        docker build -t inraep2m2/${CIRCLE_PROJECT_REPONAME}:${TAG} .
-        docker push inraep2m2/${CIRCLE_PROJECT_REPONAME}:${TAG}
+          TAG=${CIRCLE_BRANCH}
+          echo "build and push ${CIRCLE_PROJECT_REPONAME}:${TAG}"
+          echo "=====>"${pipeline.git.tag}
+          echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+          docker build -t inraep2m2/${CIRCLE_PROJECT_REPONAME}:${TAG} .
+          docker push inraep2m2/${CIRCLE_PROJECT_REPONAME}:${TAG}
