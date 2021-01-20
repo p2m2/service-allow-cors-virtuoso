@@ -10,30 +10,28 @@ version: 2.1
 workflows:
   docker-publication-workflow:
     jobs:
-      - build:
+      # only develop is build and push on dockerhub !
+      - build_branch:
           context:
             - DOCKER_CONTEXT
           filters:
             tags:
-              only: /.*/
+              ignore: /.*/
             branches:
               only:
-                - main
-                - master
                 - develop
 
-      - latest:
+      # all tags are build and push on dockerhub !
+      - build_tag_latest:
           context:
             - DOCKER_CONTEXT
-          requires:
-            - build
           filters:
             tags:
-              # only tag release version are tag latest
               only: /.*/
             branches:
               # nothing coming from branch are deployed as latest
               ignore: /.*/
+
 executors:
   docker-publisher:
     docker:
@@ -43,7 +41,7 @@ executors:
           password: ${DOCKER_PASS}
 
 jobs:
-  build:
+  build_branch:
     executor: docker-publisher
     steps:
       - checkout
@@ -57,17 +55,21 @@ jobs:
              docker build -t ${ORGANIZATION_NAME}/${IMAGE_NAME} .
              echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
              docker push ${ORGANIZATION_NAME}/${IMAGE_NAME}
-  latest:
+  build_tag_latest:
     executor: docker-publisher
     steps:
       - checkout
       - setup_remote_docker
       - run:
-          name: Publish Docker "Latest" tag
-          # publication of <application>:latest
+          name: Publish Docker Tag to Docker Hub
+          # publication of <application>:<application_tag>
           command: |
-             IMAGE_NAME=${CIRCLE_PROJECT_REPONAME}:latest
+            IMAGE_NAME=${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}
+            IMAGE_NAME_LATEST=${CIRCLE_PROJECT_REPONAME}:latest
 
-             docker build -t ${ORGANIZATION_NAME}/${IMAGE_NAME} .
-             echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
-             docker push ${ORGANIZATION_NAME}/${IMAGE_NAME}
+            docker build -t ${ORGANIZATION_NAME}/${IMAGE_NAME} .
+            docker build -t ${ORGANIZATION_NAME}/${IMAGE_NAME_LATEST} .
+
+            echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+            docker push ${ORGANIZATION_NAME}/${IMAGE_NAME}
+            docker push ${ORGANIZATION_NAME}/${IMAGE_NAME_LATEST}
