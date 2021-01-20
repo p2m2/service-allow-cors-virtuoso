@@ -1,3 +1,11 @@
+#
+# ofilangi
+#
+#  DOCKER_CONTEXT is a context global env variable for all application github p2m2 organization
+#   - DOCKER_USER          -> login
+#   - DOCKER_PASS          -> password
+#   - ORGANIZATION_NAME    -> organization register on dockerhub
+#
 version: 2.1
 workflows:
   docker-publication-workflow:
@@ -5,14 +13,23 @@ workflows:
       - build:
           context:
             - DOCKER_CONTEXT
+          filters:
+            tags:
+              only: main master develop /^v.*/
+            branches:
+              ignore: /.*/
       - latest:
           context:
             - DOCKER_CONTEXT
           requires:
             - build
           filters:
+            tags:
+              # only tag release version "v"*** are tag latest
+              only: /^v.*/
             branches:
-              only: master
+              # nothing coming from branch are deployed as latest
+              ignore: /.*/
 executors:
   docker-publisher:
     docker:
