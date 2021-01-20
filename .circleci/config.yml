@@ -1,15 +1,10 @@
 version: 2.1
 workflows:
-  my-workflow:
+  docker-publication-workflow:
     jobs:
       - build:
           context:
             - DOCKER_CONTEXT
-          filters:
-            tags:
-              only: /[0-9c].*/
-            branches:
-              ignore: /.*/
       - latest:
           context:
             - DOCKER_CONTEXT
