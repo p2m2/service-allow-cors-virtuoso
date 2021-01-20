@@ -17,6 +17,6 @@ jobs:
           name: Publish Docker Image to Docker Hub
           command: |
              echo "build and push ${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}"
-             echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+             echo ${DOCKER_PASS} | docker login https://hub.docker.com/ -u ${DOCKER_USER} --password-stdin
              docker build -t ${ORGANIZATION_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH} .
              docker push ${ORGANIZATION_NAME}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}
