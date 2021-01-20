@@ -12,8 +12,8 @@ jobs:
     steps:
       - checkout
       # build and push Docker image
-      - run: TAG=$CIRCLE_BRANCH
+      - run: TAG=${CIRCLE_BRANCH}
       - run: echo "build and push ${CIRCLE_PROJECT_REPONAME}:${TAG}"
-      - run: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      - run: echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
       - run: docker build -t inraep2m2/${CIRCLE_PROJECT_REPONAME}:${TAG} .
       - run: docker push inraep2m2/${CIRCLE_PROJECT_REPONAME}:${TAG}
