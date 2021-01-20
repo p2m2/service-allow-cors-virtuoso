@@ -17,9 +17,6 @@ workflows:
               ignore: /.*/
 executors:
   docker-publisher:
-    environment:
-      IMAGE_NAME: ${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}
-      IMAGE_LATEST: ${CIRCLE_PROJECT_REPONAME}:latest
     docker:
       - image: circleci/buildpack-deps:stretch
         auth:
@@ -34,7 +31,10 @@ jobs:
       - setup_remote_docker
       - run:
           name: Publish Docker Image to Docker Hub
+          # publication of <application>:<application_branch>
           command: |
+             IMAGE_NAME: ${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}
+
              docker build -t ${ORGANIZATION_NAME}/${IMAGE_NAME} .
              echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
              docker push ${ORGANIZATION_NAME}/${IMAGE_NAME}
@@ -45,7 +45,10 @@ jobs:
       - setup_remote_docker
       - run:
           name: Publish Docker "Latest" tag
+          # publication of <application>:latest
           command: |
+             IMAGE_NAME: ${CIRCLE_PROJECT_REPONAME}:latest
+
              docker build -t ${ORGANIZATION_NAME}/${IMAGE_NAME} .
              echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
              docker push ${ORGANIZATION_NAME}/${IMAGE_NAME}
