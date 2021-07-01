@@ -8,6 +8,8 @@ services:
       DBA_PASSWORD: dba_virtuoso
     ports:
       - 8890:8890
+    volumes:
+      - ./virtuoso:/data
 
   chrome:
     container_name: chrome
@@ -16,7 +18,7 @@ services:
       START_XVFB: 'false'
 
   selenium_cors:
-    image: inraep2m2/service-allow-cors-virtuoso:0.0.1
+    image:  inraep2m2/service-allow-cors-virtuoso:latest
     container_name: selenium_cors
     environment:
       virtuoso_site: "http://virtuoso:8890"
@@ -27,4 +29,4 @@ services:
         - chrome
         - virtuoso
     # wait 1m before execution, adjust according to configuration
-    command: bash -c 'sleep 1m && echo " **** configure CORS / Virtuoso  ****" && node virtuoso_cors.js'
+    command: bash -c 'sleep 20s && echo " **** configure CORS / Virtuoso  ****" && node virtuoso_cors.js'
