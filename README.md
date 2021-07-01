@@ -17,6 +17,6 @@ Only inside a docker-compose.yml. see [example](./example/docker-compose.yml).
 
 ## publication
 ```bash
-docker build . -t inraep2m2/service-allow-cors-virtuoso:0.0.1
-docker push inraep2m2/service-allow-cors-virtuoso:0.0.1
+docker build . -t inraep2m2/service-allow-cors-virtuoso:latest
+docker push inraep2m2/service-allow-cors-virtuoso:latest
 ```
