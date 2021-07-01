@@ -1,6 +1,8 @@
 FROM zenika/alpine-chrome:with-node
 
-MAINTAINER Olivier Filangi <olivier.filangi@inrae.fr>
+LABEL name="service-allow-cors-virtuoso"
+LABEL maintener="olivier.filangi@inrae.fr"
+LABEL build_date="2021-07-01"
 
 USER root
 RUN apk update && apk upgrade && apk add --no-cache chromium-chromedriver curl bash

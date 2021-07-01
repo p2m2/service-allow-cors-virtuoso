@@ -44,6 +44,7 @@ async function virtuoso_cors() {
       await driver.findElement(By.id("t1_toggle")).click()
       await driver.findElement(By.css(".listing_row_odd:nth-child(17) a:nth-child(1)")).click()
       await driver.findElement(By.id("t_cors")).click()
+      await driver.findElement(By.id("t_cors")).clear()
       await driver.findElement(By.id("t_cors")).sendKeys("*")
       await driver.findElement(By.name("save")).click()
       await driver.quit();
